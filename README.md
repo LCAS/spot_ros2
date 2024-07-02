@@ -21,6 +21,8 @@
   </p>
 </p>
 
+# WARNING: this is in development do not use
+
 # Overview
 This is a ROS 2 package for Boston Dynamics' Spot. The package contains all necessary topics, services and actions to teleoperate or navigate Spot.
 This package is derived from this [ROS 1 package](https://github.com/heuristicus/spot_ros). This package currently corresponds to version 4.0.2 of the [spot-sdk](https://github.com/boston-dynamics/spot-sdk/releases/tag/v4.0.2).
