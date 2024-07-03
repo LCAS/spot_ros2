@@ -95,6 +95,7 @@ RUN mkdir /tmp/colcon-logs
 ENV COLCON_LOG_PATH=/tmp/colcon-logs/
 # RUN ["colcon build --symlink-install --packages-ignore proto2ros_tests"]
 # RUN colcon build
+
 RUN echo "source /spot/install/setup.bash" >> /home/spot/.bashrc
 
 ENTRYPOINT ["bash", "-c", "source /home/spot/.bashrc && bash"] 
