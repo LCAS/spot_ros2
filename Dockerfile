@@ -82,22 +82,19 @@ RUN chown -Rv spot:spot /opt/ros/${ROS_DISTRO}/*
 
 ENV ament_cmake_DIR=/opt/ros/${ROS_DISTRO}/share/ament_cmake/cmake
 
-
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/spot/.bashrc
 USER spot
-
-# Log Colcon issues to /tmp
-RUN mkdir -p /tmp/colcon-logs/
-RUN mkdir -p /spot/build/
-ENV COLCON_LOG_PATH=/tmp/colcon-logs/
 
 WORKDIR /spot
 RUN sudo chmod -R u+w .
 RUN ./install_spot_ros2.sh --arm64
 
-SHELL ["bash", "-c"]
-
-RUN "colcon build --symlink-install --packages-ignore proto2ros_tests --build-base /spot/build"
+# Log Colcon issues to /tmp
+RUN mkdir build/
+RUN mkdir /tmp/colcon-logs
+ENV COLCON_LOG_PATH=/tmp/colcon-logs/
+# RUN ["colcon build --symlink-install --packages-ignore proto2ros_tests"]
+# RUN colcon build
 RUN echo "source /spot/install/setup.bash" >> /home/spot/.bashrc
 
 ENTRYPOINT ["bash", "-c", "source /home/spot/.bashrc && bash"] 

@@ -23,6 +23,28 @@
 
 # WARNING: this is in development do not use
 
+This is currently being developed; the following is some notes about how the system (should) work(s).
+
+1. `git clone --recursive-submodules https://github.com/lcas/spot_ros2.git` on the jetson.
+
+2. connect your laptop to spot wifi.
+
+3. open vs code on your laptop and ssh the vscode session into the jetson, opening the folder you've cloned.
+
+4. reopen as devcontainer, it will build it, it will take a long time.
+
+5. once done, open a terminal and run `colcon build --packages-ignore proto2ros_tests` in the `/spot` directory.
+
+6. `ros2 topic list`
+
+7. copy `spot_connection.yaml.example` to `spot_connection.yaml`, fill with details from ms teams (or bottom of spot, unless changed).
+
+8. `ros2 launch spot_driver spot_driver.launch.py config_file:=spot_connection.yaml [spot_name:=<Robot Name>] [publish_point_clouds:=<True|False>] [launch_rviz:=<True|False>] [uncompress_images:=<True|False>] [publish_compressed_images:=<True|False>]`
+
+9. `ros2 topic list`
+
+10. run some of the `spot_examples`
+
 # Overview
 This is a ROS 2 package for Boston Dynamics' Spot. The package contains all necessary topics, services and actions to teleoperate or navigate Spot.
 This package is derived from this [ROS 1 package](https://github.com/heuristicus/spot_ros). This package currently corresponds to version 4.0.2 of the [spot-sdk](https://github.com/boston-dynamics/spot-sdk/releases/tag/v4.0.2).

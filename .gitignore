@@ -9,3 +9,4 @@ docs/source/*.rst
 build/*
 install/*
 log/*
+spot_connection.yaml

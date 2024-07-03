@@ -2,16 +2,23 @@
   "dockerFile": "../Dockerfile",
   "name": "Spot ROS2",
   "runArgs": ["--gpus=all"],
-  "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/usr/local/cuda/bin",
-    "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64",
-    "XLA_FLAGS": "--xla_gpu_cuda_data_dir=/usr/local/cuda"
-  },
-  "remoteUser": "root",
+  "remoteUser": "spot",
   "containerEnv": {
-    "DISPLAY": ":0",
+    "DISPLAY": ":1.0",
     "ROS_LOCALHOST_ONLY": "0",
     "LIBGL_ALWAYS_SOFTWARE": "1"
   },
-  // "workspaceFolder": "/spot"
+  "workspaceFolder": "/spot",
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080, 5901],
+  "portsAttributes": {
+    "6080": {
+      "label": "novnc"
+    },
+    "5901": {
+      "label": "vnc"
+    }
+  }
 }
