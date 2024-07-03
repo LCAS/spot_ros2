@@ -97,7 +97,7 @@ RUN ./install_spot_ros2.sh --arm64
 
 SHELL ["bash", "-c"]
 
-RUN colcon build --symlink-install --packages-ignore proto2ros_tests --build-base /spot/build
+RUN "colcon build --symlink-install --packages-ignore proto2ros_tests --build-base /spot/build"
 RUN echo "source /spot/install/setup.bash" >> /home/spot/.bashrc
 
 ENTRYPOINT ["bash", "-c", "source /home/spot/.bashrc && bash"] 
