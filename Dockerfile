@@ -30,9 +30,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -q && \
   ros-humble-tl-expected && \
   rm -rf /var/lib/apt/lists/*
 
-# I added this
-RUN source "/opt/ros/${ROS_DISTRO}/setup.bash"
-
 # Install bosdyn_msgs package
 RUN curl -sL https://github.com/bdaiinstitute/bosdyn_msgs/releases/download/4.0.2/ros-humble-bosdyn_msgs_4.0.2-jammy_arm64.run --output /tmp/ros-humble-bosdyn_msgs_4.0.2-jammy_arm64.run --silent \
   && chmod +x /tmp/ros-humble-bosdyn_msgs_4.0.2-jammy_arm64.run \
@@ -68,3 +65,10 @@ RUN apt-get update -q && rosdep update && \
 
 # ROS doesn't recognize the docker shells as terminals so force colored output
 ENV RCUTILS_COLORIZED_OUTPUT=1
+
+
+
+# # This needs adding to the user!
+# RUN source "/opt/ros/${ROS_DISTRO}/setup.bash"
+
+ENTRYPOINT ["bash"]
