@@ -17,6 +17,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -q && \
   apt-get update -q && \
   apt-get install -yq --no-install-recommends \
+  wget \
   lcov \
   curl \
   python3-pip \
@@ -66,9 +67,37 @@ RUN apt-get update -q && rosdep update && \
 # ROS doesn't recognize the docker shells as terminals so force colored output
 ENV RCUTILS_COLORIZED_OUTPUT=1
 
+# Create Spot user in container
+RUN useradd -ms /bin/bash spot && \
+  passwd -d spot && \
+  adduser spot sudo && \
+  adduser spot video
+
+RUN chown spot /spot
+RUN chown -Rv spot /spot/*
+RUN chmod -Rv a+x /spot/*
+RUN chown -Rv spot:spot /opt/ros/${ROS_DISTRO}/*
+RUN chmod -Rv a+x /opt/ros/${ROS_DISTRO}/*
+RUN chown -Rv spot:spot /opt/ros/${ROS_DISTRO}/*
+
+ENV ament_cmake_DIR=/opt/ros/${ROS_DISTRO}/share/ament_cmake/cmake
 
 
-# # This needs adding to the user!
-# RUN source "/opt/ros/${ROS_DISTRO}/setup.bash"
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/spot/.bashrc
+USER spot
 
-ENTRYPOINT ["bash"]
+# Log Colcon issues to /tmp
+RUN mkdir -p /tmp/colcon-logs/
+RUN mkdir -p /spot/build/
+ENV COLCON_LOG_PATH=/tmp/colcon-logs/
+
+WORKDIR /spot
+RUN sudo chmod -R u+w .
+RUN ./install_spot_ros2.sh --arm64
+
+SHELL ["bash", "-c"]
+
+RUN colcon build --symlink-install --packages-ignore proto2ros_tests --build-base /spot/build
+RUN echo "source /spot/install/setup.bash" >> /home/spot/.bashrc
+
+ENTRYPOINT ["bash", "-c", "source /home/spot/.bashrc && bash"] 
